@@ -64,3 +64,483 @@ h6 {
 /* 
 End Reset
 */
+
+:root {
+  --main-background-color: rgb(8, 8, 8);
+  --main-white-color: rgb(241, 241, 241);
+  font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont,
+    'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue',
+    sans-serif;
+}
+
+/* 
+---------------------
+Nav Styling
+---------------------
+*/
+body {
+  background-color: var(--main-background-color);
+  color: var(--main-white-color);
+}
+
+nav {
+  height: 80px;
+  background-color: var(--main-background-color);
+  display: flex;
+  justify-content: center;
+}
+
+.main-nav-content-container {
+  width: 1200px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  color: var(--main-white-color);
+}
+
+.weather-location-container {
+  display: flex;
+  position: relative;
+}
+
+.current-weather-location-container {
+  display: flex;
+  gap: 10px;
+}
+.drop-down-btn {
+  background-color: var(--main-background-color);
+  padding: 0;
+  border: none;
+  position: relative;
+}
+.drop-down-btn svg:hover {
+  cursor: pointer;
+}
+
+.current-temp-container {
+  display: flex;
+}
+
+.saved-locations-drop-down {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  top: 40px;
+  left: 35px;
+  background-color: var(--main-background-color);
+  gap: 10px;
+}
+
+.hidden {
+  display: none;
+}
+
+.city-container {
+  display: flex;
+  gap: 40px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.city-name {
+  font-size: 16px;
+  font-weight: 500;
+}
+.delete-city-btn,
+.add-to-saved-cities-btn {
+  width: 30px;
+  background-color: var(--main-background-color);
+  border: none;
+  color: grey;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.delete-city-btn:hover,
+.add-to-saved-cities-btn:hover {
+  color: var(--main-white-color);
+  cursor: pointer;
+}
+
+.unit-changing-container {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.toggle-btn-container {
+  width: 30px;
+  height: 20px;
+  border-radius: 10px;
+  border: 1px solid var(--main-white-color);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: var(--main-background-color);
+  padding: 0;
+}
+
+.toggle-btn-container.celsius {
+  justify-content: flex-end;
+}
+.toggle-btn-container:hover {
+  cursor: pointer;
+}
+
+.inner-toggle {
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background-color: var(--main-white-color);
+}
+
+.fahrenheit-container,
+.celsius-container {
+  display: flex;
+}
+
+.fahrenheit-container h5,
+.celsius-container h5 {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.search-bar {
+  border: 1px solid var(--main-white-color);
+  display: flex;
+  align-items: center;
+  border-radius: 20px;
+  padding: 2px 20px;
+  gap: 10px;
+  background-color: var(--main-background-color);
+}
+.search-bar-icon {
+  padding: 0;
+  background-color: var(--main-background-color);
+  border: 0;
+}
+.search-bar-icon svg:hover {
+  cursor: pointer;
+}
+
+#searchBar {
+  outline: none;
+  background-color: var(--main-background-color);
+  border: none;
+  color: var(--main-white-color);
+}
+
+.celsius-container,
+.fahrenheit-container {
+  color: grey;
+}
+
+.celsius-container h5.selected,
+.fahrenheit-container h5.selected {
+  color: var(--main-white-color);
+}
+
+/* 
+---------------------
+Main Container Styling 
+---------------------
+*/
+
+.main-content-container {
+  margin-top: 50px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 50px;
+}
+
+/* 
+---------------------
+Current Weather Styling 
+--------------------- 
+*/
+
+.current-weather-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.current-weather-card {
+  width: 600px;
+  display: flex;
+  align-items: center;
+  padding: 50px;
+  gap: 20px;
+  border-radius: 6px;
+  color: var(--main-white-color);
+  border-left: 6px solid var(--main-white-color);
+}
+
+.weather-icon-container svg {
+  width: 100px;
+  height: 100px;
+}
+.current-temp-container {
+  display: flex;
+}
+.current-temp-container .units {
+  align-self: flex-end;
+}
+.current-temp-container h3 {
+  font-size: 40px;
+  font-weight: 500;
+  height: 50px;
+}
+
+.real-feel {
+  font-size: 14px;
+}
+.degrees {
+  height: 8px;
+  width: 8px;
+  /* background-color: var(--main-white-color); */
+  border: 2px solid var(--main-white-color);
+  border-radius: 50%;
+  align-self: center;
+  position: relative;
+  bottom: 10px;
+}
+.title-container {
+  font-size: 14px;
+  color: var(--main-white-color);
+  padding-left: 10px;
+}
+
+/* 
+--------------------
+Hourly Weather Styling 
+--------------------
+*/
+
+.hourly-weather-container,
+.weekly-weather-container {
+  display: flex;
+  flex-direction: column;
+
+  gap: 20px;
+}
+
+.hourly-weather-container .title,
+.weekly-weather-container .title {
+  /* width: 500px; */
+  /* align-self: center; */
+  padding-left: 60px;
+  font-size: 16px;
+}
+
+.carousel-container {
+  width: 700px;
+
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.right-chevron svg,
+.left-chevron svg {
+  width: 50px;
+  height: 50px;
+  fill: rgb(154, 154, 154);
+}
+.right-chevron svg:hover,
+.left-chevron svg:hover {
+  cursor: pointer;
+  fill: var(--main-white-color);
+}
+
+.current-view-frame {
+  /* flex: 1 1 600px; */
+
+  height: 200px;
+  width: 600px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.all-hours-container,
+.all-days-container {
+  display: flex;
+  gap: 10px;
+  position: relative;
+  right: 0px;
+}
+
+.all-hours-container .card,
+.all-days-container .card {
+  flex: 0 0 auto;
+  /* height: 170px; */
+  width: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card .main-details-container {
+  /* height: 160px; */
+  width: 100px;
+  flex: 1;
+  background-color: var(--main-white-color);
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 5px;
+  gap: 5px;
+}
+
+.weather-icon svg {
+  width: 50px;
+  height: 50px;
+  fill: var(--main-background-color);
+}
+
+.temp-container {
+  color: var(--main-background-color);
+  display: flex;
+}
+
+.temp-container .temp {
+  font-size: 35px;
+  font-weight: 500;
+  height: 50px;
+}
+
+.temp-container .degrees {
+  border: 2px solid var(--main-background-color);
+}
+
+.temp-container .units {
+  align-self: center;
+
+  position: relative;
+  top: 8px;
+}
+
+.precipitation-container {
+  display: flex;
+  align-items: center;
+}
+
+.water-icon svg {
+  fill: var(--main-background-color);
+  height: 20px;
+  width: 20px;
+}
+
+.percent-chance {
+  color: var(--main-background-color);
+  font-size: 14px;
+}
+
+/* 
+--------------------
+Weekly Weather Styling
+-------------------
+*/
+:root {
+  --dark-grey: rgb(31, 31, 31);
+}
+
+.weekly-weather-container .right-chevron svg,
+.weekly-weather-container .left-chevron svg {
+  width: 50px;
+  height: 50px;
+  fill: var(--dark-grey);
+}
+.weekly-weather-container .right-chevron svg:hover,
+.weekly-weather-container .left-chevron svg:hover {
+  cursor: pointer;
+  fill: rgb(128, 128, 128);
+}
+
+.card.weekly .temp-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content-container.weekly {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.main-details-container.weekly {
+  background-color: var(--dark-grey);
+  padding: 10px;
+}
+
+.high-temp-container,
+.low-temp-container {
+  display: flex;
+}
+
+.weather-icon.weekly svg {
+  width: 30px;
+  height: 30px;
+  fill: var(--main-white-color);
+}
+
+.high-temp-container .temp {
+  font-size: 30px;
+  color: var(--main-white-color);
+}
+
+.high-temp-container .degrees {
+  border: 2px solid var(--main-white-color);
+}
+.high-temp-container {
+  flex: 0 0 auto;
+  align-items: center;
+  height: 30px;
+}
+.main-details-container.weekly .temp-container {
+  padding: 10px;
+}
+.high-temp-container .units {
+  position: relative;
+  top: 3px;
+  color: var(--main-white-color);
+}
+
+.low-temp-container {
+  display: flex;
+  align-items: flex-start;
+  height: 30px;
+  justify-content: center;
+}
+
+.low-temp-container .degrees {
+  height: 5px;
+  width: 5px;
+  border-radius: 50%;
+  border: 1px solid var(--main-white-color);
+  position: relative;
+  top: -9px;
+}
+.low-temp-container .temp {
+  font-size: 20px;
+  height: 0px;
+  color: var(--main-white-color);
+}
+.low-temp-container .units {
+  position: relative;
+  top: 2px;
+  color: var(--main-white-color);
+}
+
+.water-icon.weekly svg {
+  fill: var(--main-white-color);
+}
+
+.percent-chance.weekly {
+  color: var(--main-white-color);
+}
