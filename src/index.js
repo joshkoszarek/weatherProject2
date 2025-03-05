@@ -1,12 +1,13 @@
 //saved location drop down menu functionality
-
-const weatherLocationsDropDownBtn = document.querySelector('.drop-down-btn');
-const hiddenLocationsDropDownMenu = document.querySelector(
-  '.saved-locations-drop-down'
-);
-weatherLocationsDropDownBtn.addEventListener('click', () => {
-  hiddenLocationsDropDownMenu.classList.toggle('hidden');
-});
+function addLocationDropDownFunctionality() {
+  const weatherLocationsDropDownBtn = document.querySelector('.drop-down-btn');
+  const hiddenLocationsDropDownMenu = document.querySelector(
+    '.saved-locations-drop-down'
+  );
+  weatherLocationsDropDownBtn.addEventListener('click', () => {
+    hiddenLocationsDropDownMenu.classList.toggle('hidden');
+  });
+}
 
 // unit changing functionality
 
@@ -171,30 +172,133 @@ function getWeeklyWeather(allWeatherDataObj) {
   return weeklyWeather;
 }
 
+///Everything having to do with taking weather data and displaying it correctly
+
 function displayWeatherData(necessaryWeatherData) {
-  //clear the DOM
-  // display top location info
   updateTopLocationDisplay(necessaryWeatherData);
-  //display right now weather
+  // updateRightNowWeatherDisplay(necessaryWeatherData);
   //display hourly weather
   //display weekly weather
 }
 
-function clearDOM() {
+function clearChildElements(parentElement) {
   // main content container
+  let child = parentElement.lastElementChild;
+  while (child) {
+    parentElement.removeChild(child);
+    child = parentElement.lastElementChild;
+  }
 }
 
-function updateTopLocationDisplay(necessaryWeatherData) {
-  const location = document.querySelector('.current-town');
-  location.textContent = necessaryWeatherData.address;
+function createTopLocationDisplayElements(necessaryWeatherData) {
+  const dropDownBtn = document.createElement('button');
+  dropDownBtn.classList.add('drop-down-btn');
+  const dropDownIcon = getSVGToAppend('drop-down-btn');
+  dropDownBtn.appendChild(dropDownIcon);
+
+  const currentTown = document.createElement('div');
+  currentTown.classList.add('current-town');
+  currentTown.textContent = necessaryWeatherData.address;
+
+  const currentWeatherIcon = getSVGToAppend(
+    necessaryWeatherData.dayOverview.icon
+  );
+
+  const currentTempContainer = document.createElement('div');
+  currentTempContainer.classList.add('current-temp-container');
+  const degrees = document.createElement('p');
+  degrees.textContent = necessaryWeatherData.dayOverview.temp;
+  const degreeSymbol = document.createElement('div');
+  degreeSymbol.classList.add('degree');
+  degreeSymbol.textContent = '°';
+  const units = document.createElement('p');
+  units.classList.add('units');
+  units.textContent = 'C';
+
+  currentTempContainer.appendChild(degrees);
+  currentTempContainer.appendChild(degreeSymbol);
+  currentTempContainer.appendChild(units);
+
+  let arrOfElementsToAppend = [
+    dropDownBtn,
+    currentTown,
+    currentWeatherIcon,
+    currentTempContainer,
+  ];
+  return arrOfElementsToAppend;
 }
-function updateRightNowWeatherDisplay(necessaryWeatherData, appendTo) {}
+
+function createRightNowWeatherElements(necessaryWeatherData) {
+  const titleContainer = document.createElement('div');
+  titleContainer.classList.add('title-container');
+  titleContainer.textContent = 'Right Now';
+
+  const currentWeatherCard = document.createElement('div');
+  currentWeatherCard.classList.add('current-weather-card');
+
+  const weatherIconContainer = document.createElement('div');
+  weatherIconContainer.classList.add('weather-icon-container');
+  const weatherIconSvg = getSVGToAppend(necessaryWeatherData.dayOverview.icon);
+  weatherIconContainer.appendChild(weatherIconSvg);
+
+  const mainWeatherDetailsContainer = document.createElement('div');
+  mainWeatherDetailsContainer.classList.add('main-weather-details-container');
+
+  const currentTempContainer = document.querySelector('div');
+  currentTempContainer.classList.add('current-temp-container');
+
+  const degree = document.createElement('h3');
+  degree.textContent = necessaryWeatherData.dayOverview.temp;
+  const degreeSymbol = document.createElement('div');
+  degreeSymbol.classList.add('degrees');
+  const units = document.createElement('div');
+  units.classList.add('units');
+  units.textContent = 'C';
+
+  const realFeel = document.createElement('div');
+  realFeel.classList.add('real-feel');
+  realFeel.textContent = `Real Feel ${necessaryWeatherData.dayOverview.realFeel}°`;
+
+  currentTempContainer.appendChild(degree);
+  currentTempContainer.appendChild(degreeSymbol);
+  currentTempContainer.appendChild(units);
+
+  mainWeatherDetailsContainer.appendChild(currentTempContainer);
+  mainWeatherDetailsContainer.appendChild(realFeel);
+
+  currentWeatherCard.appendChild(weatherIconContainer);
+  currentWeatherCard.appendChild(mainWeatherDetailsContainer);
+  let arrOfElementsToAppend = [titleContainer, currentWeatherCard];
+  return arrOfElementsToAppend;
+}
+function updateTopLocationDisplay(necessaryWeatherData) {
+  const currentWeatherLocationContainer = document.querySelector(
+    '.current-weather-location-container'
+  );
+  clearChildElements(currentWeatherLocationContainer);
+  const elementsToAppend =
+    createTopLocationDisplayElements(necessaryWeatherData);
+  elementsToAppend.forEach((element) => {
+    currentWeatherLocationContainer.appendChild(element);
+  });
+  addLocationDropDownFunctionality();
+}
+
+function updateRightNowWeatherDisplay(necessaryWeatherData) {
+  const currentWeatherContainer = document.querySelector(
+    '.current-weather-container'
+  );
+  clearChildElements(currentWeatherContainer);
+  const rightNowWeatherElements =
+    createRightNowWeatherElements(necessaryWeatherData);
+  currentWeatherContainer.appendChild(rightNowWeatherElements[0]);
+  currentWeatherContainer.appendChild(rightNowWeatherElements[1]);
+  return currentWeatherContainer;
+}
 function updateHourlyWeatherDisplay(necessaryWeatherData, appendTo) {}
 function updateWeeklyWeatherDisplay(necessaryWeatherData, appendTo) {}
 
-// addSearchFunctionality('Waterford', 'WI');
-
-function createWeatherIconsToAppend(weatherIconName) {
+function getSVGToAppend(iconName) {
   const svgNS = 'http://www.w3.org/2000/svg';
   const svg = document.createElementNS(svgNS, 'svg');
   svg.setAttribute('height', '24px');
@@ -206,7 +310,7 @@ function createWeatherIconsToAppend(weatherIconName) {
 
   //switch case on the path
 
-  switch (weatherIconName) {
+  switch (iconName) {
     case 'snow' || 'snow-showers-day' || 'snow-showers-night':
       path.setAttribute(
         'd',
@@ -267,7 +371,12 @@ function createWeatherIconsToAppend(weatherIconName) {
         'M484-80q-84 0-157.5-32t-128-86.5Q144-253 112-326.5T80-484q0-146 93-257.5T410-880q-18 99 11 193.5T521-521q71 71 165.5 100T880-410q-26 144-138 237T484-80Zm0-80q88 0 163-44t118-121q-86-8-163-43.5T464-465q-61-61-97-138t-43-163q-77 43-120.5 118.5T160-484q0 135 94.5 229.5T484-160Zm-20-305Z'
       );
       break;
+    case 'drop-down-btn':
+      path.setAttribute('d', 'M480-360 280-560h400L480-360Z');
+      break;
   }
   svg.appendChild(path);
   return svg;
 }
+
+addSearchFunctionality('Waterford', 'WI');
