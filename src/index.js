@@ -176,7 +176,7 @@ function getWeeklyWeather(allWeatherDataObj) {
 
 function displayWeatherData(necessaryWeatherData) {
   updateTopLocationDisplay(necessaryWeatherData);
-  // updateRightNowWeatherDisplay(necessaryWeatherData);
+  updateRightNowWeatherDisplay(necessaryWeatherData);
   //display hourly weather
   //display weekly weather
 }
@@ -244,7 +244,7 @@ function createRightNowWeatherElements(necessaryWeatherData) {
   const mainWeatherDetailsContainer = document.createElement('div');
   mainWeatherDetailsContainer.classList.add('main-weather-details-container');
 
-  const currentTempContainer = document.querySelector('div');
+  const currentTempContainer = document.createElement('div');
   currentTempContainer.classList.add('current-temp-container');
 
   const degree = document.createElement('h3');
@@ -257,7 +257,7 @@ function createRightNowWeatherElements(necessaryWeatherData) {
 
   const realFeel = document.createElement('div');
   realFeel.classList.add('real-feel');
-  realFeel.textContent = `Real Feel ${necessaryWeatherData.dayOverview.realFeel}°`;
+  realFeel.textContent = `Real Feel ${necessaryWeatherData.dayOverview.feelsLike}°`;
 
   currentTempContainer.appendChild(degree);
   currentTempContainer.appendChild(degreeSymbol);
