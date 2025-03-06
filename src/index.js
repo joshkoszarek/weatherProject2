@@ -96,11 +96,20 @@ function calculateCarouselInfo(cardSize, gapSize, numOfCards, viewSize) {
   return { lengthOfBin, cardsCanFit, cardsToJump, slideSize, maxPosition };
 }
 
-// function getNumberFromString(str) {
-//   console.log(str);
-//   let matches = str.match(/(\d+)/);
-//   return matches;
-// }
+function militaryTimeToRegularTime(militaryTimeStr) {
+  //return in 1 pm or 1 am format
+  const currentHour = militaryTimeStr.slice(0, 2);
+  if (+currentHour === 12) {
+    return '12 pm';
+  } else if (+currentHour === 0) {
+    return '12 am';
+  } else if (+currentHour >= 12) {
+    const correctedHour = Number(currentHour) - 12;
+    return `${correctedHour} pm`;
+  } else {
+    return `${Number(currentHour)} am`;
+  }
+}
 
 // Getting the weather data from an API call
 // Filtering the data into an object only containing
@@ -394,7 +403,7 @@ function createHourlyWeatherCarousel(necessaryWeatherData) {
     cardLabel.classList.add('card-label');
     const time = document.createElement('div');
     time.classList.add('time');
-    time.textContent = `${hourlyWeatherObj.time}`;
+    time.textContent = militaryTimeToRegularTime(hourlyWeatherObj.time);
     cardLabel.appendChild(time);
 
     card.appendChild(mainDetailsContainer);
