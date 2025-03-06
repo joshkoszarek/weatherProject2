@@ -109,6 +109,7 @@ function calculateCarouselInfo(cardSize, gapSize, numOfCards, viewSize) {
 async function addSearchFunctionality(city, state) {
   const allWeatherData = await getWeatherData(city, state);
   const necessaryWeatherData = filterWeatherData(allWeatherData);
+  console.log(necessaryWeatherData);
   displayWeatherData(necessaryWeatherData);
 }
 
@@ -233,13 +234,13 @@ function createTopLocationDisplayElements(necessaryWeatherData) {
   currentTown.textContent = necessaryWeatherData.address;
 
   const currentWeatherIcon = getSVGToAppend(
-    necessaryWeatherData.dayOverview.icon
+    necessaryWeatherData.hourly[0].icon
   );
 
   const currentTempContainer = document.createElement('div');
   currentTempContainer.classList.add('current-temp-container');
   const degrees = document.createElement('p');
-  degrees.textContent = necessaryWeatherData.dayOverview.temp;
+  degrees.textContent = necessaryWeatherData.hourly[0].currentTemp;
   const degreeSymbol = document.createElement('div');
   degreeSymbol.classList.add('degree');
   degreeSymbol.textContent = '°';
@@ -270,7 +271,7 @@ function createRightNowWeatherElements(necessaryWeatherData) {
 
   const weatherIconContainer = document.createElement('div');
   weatherIconContainer.classList.add('weather-icon-container');
-  const weatherIconSvg = getSVGToAppend(necessaryWeatherData.dayOverview.icon);
+  const weatherIconSvg = getSVGToAppend(necessaryWeatherData.hourly[0].icon);
   weatherIconContainer.appendChild(weatherIconSvg);
 
   const mainWeatherDetailsContainer = document.createElement('div');
@@ -280,7 +281,7 @@ function createRightNowWeatherElements(necessaryWeatherData) {
   currentTempContainer.classList.add('current-temp-container');
 
   const degree = document.createElement('h3');
-  degree.textContent = necessaryWeatherData.dayOverview.temp;
+  degree.textContent = necessaryWeatherData.hourly[0].currentTemp;
   const degreeSymbol = document.createElement('div');
   degreeSymbol.classList.add('degrees');
   const units = document.createElement('div');
