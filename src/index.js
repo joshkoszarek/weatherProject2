@@ -19,8 +19,58 @@ toggleBtn.addEventListener('click', () => {
   navFahrenheit.classList.toggle('selected');
   navCelsius.classList.toggle('selected');
   toggleBtn.classList.toggle('celsius');
+
+  const tempElementNodeList = document.querySelectorAll('.temp');
+  const unitElementNodeList = document.querySelectorAll('.units');
+  const realFeelMessageElement = document.querySelector('.real-feel');
+  //want to update the textContent on each
+  if (toggleBtn.classList.contains('celsius')) {
+    tempElementNodeList.forEach((e) => {
+      e.textContent = fahrenheitToCelsius(+e.textContent);
+    });
+    unitElementNodeList.forEach((e) => {
+      e.textContent = 'C';
+    });
+    realFeelMessageElement.textContent = updateRealFeelMessage(
+      realFeelMessageElement.textContent,
+      'celsius'
+    );
+  } else {
+    tempElementNodeList.forEach((e) => {
+      e.textContent = celsiusToFahrenheit(+e.textContent);
+    });
+    unitElementNodeList.forEach((e) => {
+      e.textContent = 'F';
+    });
+    realFeelMessageElement.textContent = updateRealFeelMessage(
+      realFeelMessageElement.textContent,
+      'fahrenheit'
+    );
+  }
 });
 
+function updateRealFeelMessage(message, unitsToConvertTo) {
+  //get the number from the message
+  const extractedNumber = message.match(/\d+/);
+  console.log(message);
+  console.log(unitsToConvertTo);
+  console.log(extractedNumber[0]);
+  let convertedNumber = '';
+  unitsToConvertTo === 'celsius'
+    ? (convertedNumber = fahrenheitToCelsius(+extractedNumber[0]))
+    : (convertedNumber = celsiusToFahrenheit(+extractedNumber[0]));
+  return `Real feel ${convertedNumber}°`;
+  //convert the number to the right units
+  // return the updated message
+}
+function fahrenheitToCelsius(degreesFahrenheit) {
+  const degreesCelsius = (degreesFahrenheit - 32) * (5 / 9);
+  return Math.round(degreesCelsius);
+}
+function celsiusToFahrenheit(degreesCelsius) {
+  const degreesFahrenheit = degreesCelsius * (9 / 5) + 32;
+  return Math.round(degreesFahrenheit);
+}
 // Carousel functionality
 // Hourly has 24 hours to be displayed
 // Weekly has 7 days to be displayed
@@ -190,6 +240,7 @@ function getHourlyWeather(allWeatherDataObj) {
         icon: currentDayHourlyArray[i + currentHour].icon,
         precipitationProb: currentDayHourlyArray[i + currentHour].precipprob,
         time: currentDayHourlyArray[i + currentHour].datetime,
+        feelsLike: currentDayHourlyArray[i + currentHour].feelslike,
       };
       hourlyWeatherArray.push(oneHourObj);
     } else {
@@ -198,6 +249,7 @@ function getHourlyWeather(allWeatherDataObj) {
         icon: nextDayHourlyArray[i - hoursLeftInDay].icon,
         precipitationProb: nextDayHourlyArray[i - hoursLeftInDay].precipprob,
         time: nextDayHourlyArray[i - hoursLeftInDay].datetime,
+        feelsLike: nextDayHourlyArray[i - hoursLeftInDay].feelslike,
       };
       hourlyWeatherArray.push(oneHourObj);
     }
@@ -256,13 +308,14 @@ function createTopLocationDisplayElements(necessaryWeatherData) {
   const currentTempContainer = document.createElement('div');
   currentTempContainer.classList.add('current-temp-container');
   const degrees = document.createElement('p');
+  degrees.classList.add('temp');
   degrees.textContent = Math.round(necessaryWeatherData.hourly[0].currentTemp);
   const degreeSymbol = document.createElement('div');
   degreeSymbol.classList.add('degree');
   degreeSymbol.textContent = '°';
   const units = document.createElement('p');
   units.classList.add('units');
-  units.textContent = 'C';
+  units.textContent = 'F';
 
   currentTempContainer.appendChild(degrees);
   currentTempContainer.appendChild(degreeSymbol);
@@ -298,16 +351,17 @@ function createRightNowWeatherElements(necessaryWeatherData) {
 
   const degree = document.createElement('h3');
   degree.textContent = Math.round(necessaryWeatherData.hourly[0].currentTemp);
+  degree.classList.add('temp');
   const degreeSymbol = document.createElement('div');
   degreeSymbol.classList.add('degrees');
   const units = document.createElement('div');
   units.classList.add('units');
-  units.textContent = 'C';
+  units.textContent = 'F';
 
   const realFeel = document.createElement('div');
   realFeel.classList.add('real-feel');
   realFeel.textContent = `Real Feel ${Math.round(
-    necessaryWeatherData.dayOverview.feelsLike
+    necessaryWeatherData.hourly[0].feelsLike
   )}°`;
 
   currentTempContainer.appendChild(degree);
@@ -382,7 +436,7 @@ function createHourlyWeatherCarousel(necessaryWeatherData) {
     degrees.classList.add('degrees');
     const units = document.createElement('div');
     units.classList.add('units');
-    units.textContent = 'C';
+    units.textContent = 'F';
 
     tempContainer.appendChild(temp);
     tempContainer.appendChild(degrees);
