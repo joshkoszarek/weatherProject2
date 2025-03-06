@@ -51,7 +51,7 @@ function addHourlyCarouselSliderFunctionality() {
     console.log('clicked');
     const carouselInfoObj = calculateCarouselInfo(100, 10, 24, 600);
     const moveLeft = currentPosition - carouselInfoObj.slideSize;
-    if (moveLeft > 0) {
+    if (moveLeft >= 0) {
       allHoursContainer.style.right = `${moveLeft}px`;
       currentPosition = moveLeft;
     }
@@ -81,7 +81,7 @@ function addWeeklyCarouselSliderFunctionality() {
     console.log('clicked');
     const carouselInfoObj = calculateCarouselInfo(100, 10, 7, 600);
     const moveLeft = currentPosition - carouselInfoObj.slideSize;
-    if (moveLeft > 0) {
+    if (moveLeft >= 0) {
       allDaysContainer.style.right = `${moveLeft}px`;
       currentPosition = moveLeft;
     }
