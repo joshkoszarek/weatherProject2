@@ -10,51 +10,49 @@ function addLocationDropDownFunctionality() {
 }
 
 // unit changing functionality
+function addUnitToggleButtonFunctionality() {
+  const toggleBtn = document.querySelector('.toggle-btn-container');
+  const navFahrenheit = document.querySelector('.fahrenheit-container h5');
+  const navCelsius = document.querySelector('.celsius-container h5');
 
-const toggleBtn = document.querySelector('.toggle-btn-container');
-const navFahrenheit = document.querySelector('.fahrenheit-container h5');
-const navCelsius = document.querySelector('.celsius-container h5');
+  toggleBtn.addEventListener('click', () => {
+    navFahrenheit.classList.toggle('selected');
+    navCelsius.classList.toggle('selected');
+    toggleBtn.classList.toggle('celsius');
 
-toggleBtn.addEventListener('click', () => {
-  navFahrenheit.classList.toggle('selected');
-  navCelsius.classList.toggle('selected');
-  toggleBtn.classList.toggle('celsius');
-
-  const tempElementNodeList = document.querySelectorAll('.temp');
-  const unitElementNodeList = document.querySelectorAll('.units');
-  const realFeelMessageElement = document.querySelector('.real-feel');
-  //want to update the textContent on each
-  if (toggleBtn.classList.contains('celsius')) {
-    tempElementNodeList.forEach((e) => {
-      e.textContent = fahrenheitToCelsius(+e.textContent);
-    });
-    unitElementNodeList.forEach((e) => {
-      e.textContent = 'C';
-    });
-    realFeelMessageElement.textContent = updateRealFeelMessage(
-      realFeelMessageElement.textContent,
-      'celsius'
-    );
-  } else {
-    tempElementNodeList.forEach((e) => {
-      e.textContent = celsiusToFahrenheit(+e.textContent);
-    });
-    unitElementNodeList.forEach((e) => {
-      e.textContent = 'F';
-    });
-    realFeelMessageElement.textContent = updateRealFeelMessage(
-      realFeelMessageElement.textContent,
-      'fahrenheit'
-    );
-  }
-});
+    const tempElementNodeList = document.querySelectorAll('.temp');
+    const unitElementNodeList = document.querySelectorAll('.units');
+    const realFeelMessageElement = document.querySelector('.real-feel');
+    //want to update the textContent on each
+    if (toggleBtn.classList.contains('celsius')) {
+      tempElementNodeList.forEach((e) => {
+        e.textContent = fahrenheitToCelsius(+e.textContent);
+      });
+      unitElementNodeList.forEach((e) => {
+        e.textContent = 'C';
+      });
+      realFeelMessageElement.textContent = updateRealFeelMessage(
+        realFeelMessageElement.textContent,
+        'celsius'
+      );
+    } else {
+      tempElementNodeList.forEach((e) => {
+        e.textContent = celsiusToFahrenheit(+e.textContent);
+      });
+      unitElementNodeList.forEach((e) => {
+        e.textContent = 'F';
+      });
+      realFeelMessageElement.textContent = updateRealFeelMessage(
+        realFeelMessageElement.textContent,
+        'fahrenheit'
+      );
+    }
+  });
+}
 
 function updateRealFeelMessage(message, unitsToConvertTo) {
   //get the number from the message
   const extractedNumber = message.match(/\d+/);
-  console.log(message);
-  console.log(unitsToConvertTo);
-  console.log(extractedNumber[0]);
   let convertedNumber = '';
   unitsToConvertTo === 'celsius'
     ? (convertedNumber = fahrenheitToCelsius(+extractedNumber[0]))
@@ -201,14 +199,17 @@ function filterWeatherData(allWeatherData) {
   };
   return filteredWeatherObject;
 }
-
+function preRoundData(temp) {
+  const convertedTemp = fahrenheitToCelsius(temp);
+  return celsiusToFahrenheit(convertedTemp);
+}
 function getRightNowWeather(allWeatherDataObj) {
   const currentDay = allWeatherDataObj.days[0];
   const rightNowWeatherObject = {
-    tempMax: currentDay.tempmax,
-    tempMin: currentDay.tempmin,
-    temp: currentDay.temp,
-    feelsLike: currentDay.feelslike,
+    tempMax: preRoundData(currentDay.tempmax),
+    tempMin: preRoundData(currentDay.tempmin),
+    temp: preRoundData(currentDay.temp),
+    feelsLike: preRoundData(currentDay.feelslike),
     icon: currentDay.icon,
   };
   return rightNowWeatherObject;
@@ -236,20 +237,24 @@ function getHourlyWeather(allWeatherDataObj) {
   for (let i = 0; i < 24; i++) {
     if (hoursLeftInDay > i) {
       const oneHourObj = {
-        currentTemp: currentDayHourlyArray[i + currentHour].temp,
+        currentTemp: preRoundData(currentDayHourlyArray[i + currentHour].temp),
         icon: currentDayHourlyArray[i + currentHour].icon,
         precipitationProb: currentDayHourlyArray[i + currentHour].precipprob,
         time: currentDayHourlyArray[i + currentHour].datetime,
-        feelsLike: currentDayHourlyArray[i + currentHour].feelslike,
+        feelsLike: preRoundData(
+          currentDayHourlyArray[i + currentHour].feelslike
+        ),
       };
       hourlyWeatherArray.push(oneHourObj);
     } else {
       const oneHourObj = {
-        currentTemp: nextDayHourlyArray[i - hoursLeftInDay].temp,
+        currentTemp: preRoundData(nextDayHourlyArray[i - hoursLeftInDay].temp),
         icon: nextDayHourlyArray[i - hoursLeftInDay].icon,
         precipitationProb: nextDayHourlyArray[i - hoursLeftInDay].precipprob,
         time: nextDayHourlyArray[i - hoursLeftInDay].datetime,
-        feelsLike: nextDayHourlyArray[i - hoursLeftInDay].feelslike,
+        feelsLike: preRoundData(
+          nextDayHourlyArray[i - hoursLeftInDay].feelslike
+        ),
       };
       hourlyWeatherArray.push(oneHourObj);
     }
@@ -262,8 +267,8 @@ function getWeeklyWeather(allWeatherDataObj) {
   for (let i = 0; i < 7; i++) {
     const dailyWeather = allWeatherDataObj.days[i];
     const dailyWeatherObject = {
-      highTemp: dailyWeather.tempmax,
-      lowTemp: dailyWeather.tempmin,
+      highTemp: preRoundData(dailyWeather.tempmax),
+      lowTemp: preRoundData(dailyWeather.tempmin),
       icon: dailyWeather.icon,
       precipProb: dailyWeather.precipprob,
       date: dailyWeather.datetime,
@@ -730,4 +735,5 @@ function getSVGToAppend(iconName) {
   return svg;
 }
 
+addUnitToggleButtonFunctionality();
 addSearchFunctionality('Waterford', 'WI');
