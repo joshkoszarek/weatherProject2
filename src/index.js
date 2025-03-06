@@ -111,6 +111,12 @@ function militaryTimeToRegularTime(militaryTimeStr) {
   }
 }
 
+function getDayFromDate(datetime) {
+  //convert date time string '2025-03-06' to Thurs
+  const daysOfWeek = ['Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat', 'Sun'];
+  const dayOfWeek = new Date(datetime).getDay();
+  return daysOfWeek[dayOfWeek];
+}
 // Getting the weather data from an API call
 // Filtering the data into an object only containing
 // info that is going to be displayed
@@ -208,6 +214,7 @@ function getWeeklyWeather(allWeatherDataObj) {
       lowTemp: dailyWeather.tempmin,
       icon: dailyWeather.icon,
       precipProb: dailyWeather.precipprob,
+      date: dailyWeather.datetime,
     };
     weeklyWeather.push(dailyWeatherObject);
   }
@@ -504,7 +511,7 @@ function createWeeklyWeatherCarousel(necessaryWeatherData) {
     cardLabel.classList.add('card-label');
     const time = document.createElement('div');
     time.classList.add('time');
-    time.textContent = `Wed`;
+    time.textContent = getDayFromDate(weeklyWeatherObj.date);
     cardLabel.appendChild(time);
 
     card.appendChild(mainDetailsContainer);
