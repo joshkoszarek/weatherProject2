@@ -27,14 +27,18 @@ toggleBtn.addEventListener('click', () => {
 // This only controls the movement of carousels via the chevrons
 // The inner information cards have a structure and updated independently
 
-const leftChevronBtn = document.querySelector('.left-chevron svg');
-const rightChevronBtn = document.querySelector('.right-chevron svg');
-const allHoursContainer = document.querySelector('.all-hours-container');
-
-function addCarouselSliderFunctionality() {
+function addHourlyCarouselSliderFunctionality() {
   let currentPosition = 0;
+  const leftChevronBtn = document.querySelector(
+    '.hourly-weather-container .left-chevron svg'
+  );
+  const rightChevronBtn = document.querySelector(
+    '.hourly-weather-container .right-chevron svg'
+  );
+  const allHoursContainer = document.querySelector('.all-hours-container');
 
   rightChevronBtn.addEventListener('click', () => {
+    console.log('clicked');
     const carouselInfoObj = calculateCarouselInfo(100, 10, 24, 600);
     const moveRight = currentPosition + carouselInfoObj.slideSize;
     if (moveRight < carouselInfoObj.maxPosition) {
@@ -44,6 +48,7 @@ function addCarouselSliderFunctionality() {
   });
 
   leftChevronBtn.addEventListener('click', () => {
+    console.log('clicked');
     const carouselInfoObj = calculateCarouselInfo(100, 10, 24, 600);
     const moveLeft = currentPosition - carouselInfoObj.slideSize;
     if (moveLeft > 0) {
@@ -62,13 +67,13 @@ function calculateCarouselInfo(cardSize, gapSize, numOfCards, viewSize) {
   return { lengthOfBin, cardsCanFit, cardsToJump, slideSize, maxPosition };
 }
 
-function getNumberFromString(str) {
-  console.log(str);
-  let matches = str.match(/(\d+)/);
-  return matches;
-}
+// function getNumberFromString(str) {
+//   console.log(str);
+//   let matches = str.match(/(\d+)/);
+//   return matches;
+// }
 
-addCarouselSliderFunctionality();
+// addCarouselSliderFunctionality();
 
 // Getting the weather data from an API call
 // Filtering the data into an object only containing
@@ -177,6 +182,7 @@ function getWeeklyWeather(allWeatherDataObj) {
 function displayWeatherData(necessaryWeatherData) {
   updateTopLocationDisplay(necessaryWeatherData);
   updateRightNowWeatherDisplay(necessaryWeatherData);
+  updateHourlyWeatherDisplay(necessaryWeatherData);
   //display hourly weather
   //display weekly weather
 }
@@ -271,6 +277,104 @@ function createRightNowWeatherElements(necessaryWeatherData) {
   let arrOfElementsToAppend = [titleContainer, currentWeatherCard];
   return arrOfElementsToAppend;
 }
+
+function createHourlyWeatherDisplayElements(necessaryWeatherData) {
+  const title = document.createElement('div');
+  title.classList.add('title');
+
+  const carousel = createHourlyWeatherCarousel(necessaryWeatherData);
+  let arrOfElementsToAppend = [title, carousel];
+  return arrOfElementsToAppend;
+}
+
+function createHourlyWeatherCarousel(necessaryWeatherData) {
+  const carouselContainer = document.createElement('div');
+  carouselContainer.classList.add('carousel-container');
+
+  const leftChevron = document.createElement('div');
+  leftChevron.classList.add('left-chevron');
+  const leftChevronSvg = getSVGToAppend('left-chevron');
+  leftChevron.appendChild(leftChevronSvg);
+
+  const rightChevron = document.createElement('div');
+  rightChevron.classList.add('right-chevron');
+  const rightChevronSvg = getSVGToAppend('right-chevron');
+  rightChevron.appendChild(rightChevronSvg);
+
+  const currentViewFrame = document.createElement('div');
+  currentViewFrame.classList.add('current-view-frame');
+
+  const allHoursContainer = document.createElement('div');
+  allHoursContainer.classList.add('all-hours-container');
+
+  const hourlyWeatherDataArray = necessaryWeatherData.hourly;
+
+  hourlyWeatherDataArray.forEach((hourlyWeatherObj) => {
+    const card = document.createElement('div');
+    card.classList.add('card');
+    const mainDetailsContainer = document.createElement('div');
+    mainDetailsContainer.classList.add('main-details-container');
+
+    const weatherIcon = document.createElement('div');
+    weatherIcon.classList.add('weather-icon');
+    const weatherSvg = getSVGToAppend(hourlyWeatherObj.icon);
+    weatherIcon.appendChild(weatherSvg);
+
+    const tempContainer = document.createElement('div');
+    tempContainer.classList.add('temp-container');
+
+    const temp = document.createElement('div');
+    temp.classList.add('temp');
+    temp.textContent = hourlyWeatherObj.currentTemp;
+    const degrees = document.createElement('div');
+    degrees.classList.add('degrees');
+    const units = document.createElement('div');
+    units.classList.add('units');
+    units.textContent = 'C';
+
+    tempContainer.appendChild(temp);
+    tempContainer.appendChild(degrees);
+    tempContainer.appendChild(units);
+
+    const precipitationContainer = document.createElement('div');
+    precipitationContainer.classList.add('precipitation-container');
+    const waterIcon = document.createElement('div');
+    waterIcon.classList.add('water-icon');
+    const waterSvg = getSVGToAppend('water-drop');
+    waterIcon.appendChild(waterSvg);
+
+    const percentChance = document.createElement('div');
+    percentChance.classList.add('percent-chance');
+    percentChance.textContent = `${hourlyWeatherObj.precipitationProb}%`;
+
+    precipitationContainer.appendChild(waterIcon);
+    precipitationContainer.appendChild(percentChance);
+
+    mainDetailsContainer.appendChild(weatherIcon);
+    mainDetailsContainer.appendChild(tempContainer);
+    mainDetailsContainer.appendChild(precipitationContainer);
+
+    const cardLabel = document.createElement('div');
+    cardLabel.classList.add('card-label');
+    const time = document.createElement('div');
+    time.classList.add('time');
+    time.textContent = `${hourlyWeatherObj.time}`;
+    cardLabel.appendChild(time);
+
+    card.appendChild(mainDetailsContainer);
+    card.appendChild(cardLabel);
+
+    allHoursContainer.appendChild(card);
+  });
+
+  currentViewFrame.appendChild(allHoursContainer);
+
+  carouselContainer.appendChild(leftChevron);
+  carouselContainer.appendChild(currentViewFrame);
+  carouselContainer.appendChild(rightChevron);
+
+  return carouselContainer;
+}
 function updateTopLocationDisplay(necessaryWeatherData) {
   const currentWeatherLocationContainer = document.querySelector(
     '.current-weather-location-container'
@@ -295,7 +399,18 @@ function updateRightNowWeatherDisplay(necessaryWeatherData) {
   currentWeatherContainer.appendChild(rightNowWeatherElements[1]);
   return currentWeatherContainer;
 }
-function updateHourlyWeatherDisplay(necessaryWeatherData, appendTo) {}
+function updateHourlyWeatherDisplay(necessaryWeatherData) {
+  const hourlyWeatherContainer = document.querySelector(
+    '.hourly-weather-container'
+  );
+  clearChildElements(hourlyWeatherContainer);
+  const elementsToAppend =
+    createHourlyWeatherDisplayElements(necessaryWeatherData);
+  hourlyWeatherContainer.appendChild(elementsToAppend[0]);
+  hourlyWeatherContainer.appendChild(elementsToAppend[1]);
+
+  addHourlyCarouselSliderFunctionality();
+}
 function updateWeeklyWeatherDisplay(necessaryWeatherData, appendTo) {}
 
 function getSVGToAppend(iconName) {
@@ -373,6 +488,24 @@ function getSVGToAppend(iconName) {
       break;
     case 'drop-down-btn':
       path.setAttribute('d', 'M480-360 280-560h400L480-360Z');
+      break;
+    case 'left-chevron':
+      path.setAttribute(
+        'd',
+        'M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z'
+      );
+      break;
+    case 'right-chevron':
+      path.setAttribute(
+        'd',
+        'M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z'
+      );
+      break;
+    case 'water-drop':
+      path.setAttribute(
+        'd',
+        'M491-200q12-1 20.5-9.5T520-230q0-14-9-22.5t-23-7.5q-41 3-87-22.5T343-375q-2-11-10.5-18t-19.5-7q-14 0-23 10.5t-6 24.5q17 91 80 130t127 35ZM480-80q-137 0-228.5-94T160-408q0-100 79.5-217.5T480-880q161 137 240.5 254.5T800-408q0 140-91.5 234T480-80Zm0-80q104 0 172-70.5T720-408q0-73-60.5-165T480-774Q361-665 300.5-573T240-408q0 107 68 177.5T480-160Zm0-320Z'
+      );
       break;
   }
   svg.appendChild(path);
