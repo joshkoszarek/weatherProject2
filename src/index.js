@@ -240,7 +240,7 @@ function createTopLocationDisplayElements(necessaryWeatherData) {
   const currentTempContainer = document.createElement('div');
   currentTempContainer.classList.add('current-temp-container');
   const degrees = document.createElement('p');
-  degrees.textContent = necessaryWeatherData.hourly[0].currentTemp;
+  degrees.textContent = Math.round(necessaryWeatherData.hourly[0].currentTemp);
   const degreeSymbol = document.createElement('div');
   degreeSymbol.classList.add('degree');
   degreeSymbol.textContent = '°';
@@ -281,7 +281,7 @@ function createRightNowWeatherElements(necessaryWeatherData) {
   currentTempContainer.classList.add('current-temp-container');
 
   const degree = document.createElement('h3');
-  degree.textContent = necessaryWeatherData.hourly[0].currentTemp;
+  degree.textContent = Math.round(necessaryWeatherData.hourly[0].currentTemp);
   const degreeSymbol = document.createElement('div');
   degreeSymbol.classList.add('degrees');
   const units = document.createElement('div');
@@ -290,7 +290,9 @@ function createRightNowWeatherElements(necessaryWeatherData) {
 
   const realFeel = document.createElement('div');
   realFeel.classList.add('real-feel');
-  realFeel.textContent = `Real Feel ${necessaryWeatherData.dayOverview.feelsLike}°`;
+  realFeel.textContent = `Real Feel ${Math.round(
+    necessaryWeatherData.dayOverview.feelsLike
+  )}°`;
 
   currentTempContainer.appendChild(degree);
   currentTempContainer.appendChild(degreeSymbol);
@@ -359,7 +361,7 @@ function createHourlyWeatherCarousel(necessaryWeatherData) {
 
     const temp = document.createElement('div');
     temp.classList.add('temp');
-    temp.textContent = hourlyWeatherObj.currentTemp;
+    temp.textContent = Math.round(hourlyWeatherObj.currentTemp);
     const degrees = document.createElement('div');
     degrees.classList.add('degrees');
     const units = document.createElement('div');
@@ -450,7 +452,7 @@ function createWeeklyWeatherCarousel(necessaryWeatherData) {
     highTempContainer.classList.add('high-temp-container');
     const highTemp = document.createElement('div');
     highTemp.classList.add('temp');
-    highTemp.textContent = weeklyWeatherObj.highTemp;
+    highTemp.textContent = Math.round(weeklyWeatherObj.highTemp);
     const highTempDegreeSymbol = document.createElement('div');
     highTempDegreeSymbol.classList.add('degrees');
 
@@ -461,7 +463,7 @@ function createWeeklyWeatherCarousel(necessaryWeatherData) {
     lowTempContainer.classList.add('low-temp-container');
     const lowTemp = document.createElement('div');
     lowTemp.classList.add('temp');
-    lowTemp.textContent = weeklyWeatherObj.lowTemp;
+    lowTemp.textContent = Math.round(weeklyWeatherObj.lowTemp);
     const lowTempDegreeSymbol = document.createElement('div');
     lowTempDegreeSymbol.classList.add('degrees');
 
