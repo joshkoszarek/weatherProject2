@@ -57,7 +57,36 @@ function addHourlyCarouselSliderFunctionality() {
     }
   });
 }
+function addWeeklyCarouselSliderFunctionality() {
+  let currentPosition = 0;
+  const leftChevronBtn = document.querySelector(
+    '.weekly-weather-container .left-chevron svg'
+  );
+  const rightChevronBtn = document.querySelector(
+    '.weekly-weather-container .right-chevron svg'
+  );
+  const allDaysContainer = document.querySelector('.all-days-container');
 
+  rightChevronBtn.addEventListener('click', () => {
+    console.log('clicked');
+    const carouselInfoObj = calculateCarouselInfo(100, 10, 7, 600);
+    const moveRight = currentPosition + carouselInfoObj.slideSize;
+    if (moveRight < carouselInfoObj.maxPosition) {
+      allDaysContainer.style.right = `${moveRight}px`;
+      currentPosition = moveRight;
+    }
+  });
+
+  leftChevronBtn.addEventListener('click', () => {
+    console.log('clicked');
+    const carouselInfoObj = calculateCarouselInfo(100, 10, 7, 600);
+    const moveLeft = currentPosition - carouselInfoObj.slideSize;
+    if (moveLeft > 0) {
+      allDaysContainer.style.right = `${moveLeft}px`;
+      currentPosition = moveLeft;
+    }
+  });
+}
 function calculateCarouselInfo(cardSize, gapSize, numOfCards, viewSize) {
   const lengthOfBin = cardSize * numOfCards + gapSize * numOfCards;
   const cardsCanFit = Math.floor(viewSize / cardSize);
@@ -72,8 +101,6 @@ function calculateCarouselInfo(cardSize, gapSize, numOfCards, viewSize) {
 //   let matches = str.match(/(\d+)/);
 //   return matches;
 // }
-
-// addCarouselSliderFunctionality();
 
 // Getting the weather data from an API call
 // Filtering the data into an object only containing
@@ -183,8 +210,7 @@ function displayWeatherData(necessaryWeatherData) {
   updateTopLocationDisplay(necessaryWeatherData);
   updateRightNowWeatherDisplay(necessaryWeatherData);
   updateHourlyWeatherDisplay(necessaryWeatherData);
-  //display hourly weather
-  //display weekly weather
+  updateWeeklyWeatherDisplay(necessaryWeatherData);
 }
 
 function clearChildElements(parentElement) {
@@ -286,7 +312,14 @@ function createHourlyWeatherDisplayElements(necessaryWeatherData) {
   let arrOfElementsToAppend = [title, carousel];
   return arrOfElementsToAppend;
 }
+function createWeeklyWeatherDisplayElements(necessaryWeatherData) {
+  const title = document.createElement('div');
+  title.classList.add('title');
 
+  const carousel = createWeeklyWeatherCarousel(necessaryWeatherData);
+  let arrOfElementsToAppend = [title, carousel];
+  return arrOfElementsToAppend;
+}
 function createHourlyWeatherCarousel(necessaryWeatherData) {
   const carouselContainer = document.createElement('div');
   carouselContainer.classList.add('carousel-container');
@@ -375,6 +408,107 @@ function createHourlyWeatherCarousel(necessaryWeatherData) {
 
   return carouselContainer;
 }
+
+function createWeeklyWeatherCarousel(necessaryWeatherData) {
+  const carouselContainer = document.createElement('div');
+  carouselContainer.classList.add('carousel-container');
+
+  const leftChevron = document.createElement('div');
+  leftChevron.classList.add('left-chevron', 'weekly');
+  const leftChevronSvg = getSVGToAppend('left-chevron');
+  leftChevron.appendChild(leftChevronSvg);
+
+  const rightChevron = document.createElement('div');
+  rightChevron.classList.add('right-chevron', 'weekly');
+  const rightChevronSvg = getSVGToAppend('right-chevron');
+  rightChevron.appendChild(rightChevronSvg);
+
+  const currentViewFrame = document.createElement('div');
+  currentViewFrame.classList.add('current-view-frame');
+
+  const allDaysContainer = document.createElement('div');
+  allDaysContainer.classList.add('all-days-container');
+
+  const weeklyWeatherDataArray = necessaryWeatherData.weekly;
+
+  weeklyWeatherDataArray.forEach((weeklyWeatherObj) => {
+    const card = document.createElement('div');
+    card.classList.add('card', 'weekly');
+    const mainDetailsContainer = document.createElement('div');
+    mainDetailsContainer.classList.add('main-details-container', 'weekly');
+
+    const weatherIcon = document.createElement('div');
+    weatherIcon.classList.add('weather-icon', 'weekly');
+    const weatherSvg = getSVGToAppend(weeklyWeatherObj.icon);
+    weatherIcon.appendChild(weatherSvg);
+
+    const tempContainer = document.createElement('div');
+    tempContainer.classList.add('temp-container');
+
+    const highTempContainer = document.createElement('div');
+    highTempContainer.classList.add('high-temp-container');
+    const highTemp = document.createElement('div');
+    highTemp.classList.add('temp');
+    highTemp.textContent = weeklyWeatherObj.highTemp;
+    const highTempDegreeSymbol = document.createElement('div');
+    highTempDegreeSymbol.classList.add('degrees');
+
+    highTempContainer.appendChild(highTemp);
+    highTempContainer.appendChild(highTempDegreeSymbol);
+
+    const lowTempContainer = document.createElement('div');
+    lowTempContainer.classList.add('low-temp-container');
+    const lowTemp = document.createElement('div');
+    lowTemp.classList.add('temp');
+    lowTemp.textContent = weeklyWeatherObj.lowTemp;
+    const lowTempDegreeSymbol = document.createElement('div');
+    lowTempDegreeSymbol.classList.add('degrees');
+
+    lowTempContainer.appendChild(lowTemp);
+    lowTempContainer.appendChild(lowTempDegreeSymbol);
+
+    tempContainer.appendChild(highTempContainer);
+    tempContainer.appendChild(lowTempContainer);
+
+    const precipitationContainer = document.createElement('div');
+    precipitationContainer.classList.add('precipitation-container', 'weekly');
+    const waterIcon = document.createElement('div');
+    waterIcon.classList.add('water-icon', 'weekly');
+    const waterSvg = getSVGToAppend('water-drop');
+    waterIcon.appendChild(waterSvg);
+
+    const percentChance = document.createElement('div');
+    percentChance.classList.add('percent-chance', 'weekly');
+    percentChance.textContent = `${weeklyWeatherObj.precipProb}%`;
+
+    precipitationContainer.appendChild(waterIcon);
+    precipitationContainer.appendChild(percentChance);
+
+    mainDetailsContainer.appendChild(weatherIcon);
+    mainDetailsContainer.appendChild(tempContainer);
+    mainDetailsContainer.appendChild(precipitationContainer);
+
+    const cardLabel = document.createElement('div');
+    cardLabel.classList.add('card-label');
+    const time = document.createElement('div');
+    time.classList.add('time');
+    time.textContent = `Wed`;
+    cardLabel.appendChild(time);
+
+    card.appendChild(mainDetailsContainer);
+    card.appendChild(cardLabel);
+
+    allDaysContainer.appendChild(card);
+  });
+
+  currentViewFrame.appendChild(allDaysContainer);
+
+  carouselContainer.appendChild(leftChevron);
+  carouselContainer.appendChild(currentViewFrame);
+  carouselContainer.appendChild(rightChevron);
+
+  return carouselContainer;
+}
 function updateTopLocationDisplay(necessaryWeatherData) {
   const currentWeatherLocationContainer = document.querySelector(
     '.current-weather-location-container'
@@ -411,7 +545,18 @@ function updateHourlyWeatherDisplay(necessaryWeatherData) {
 
   addHourlyCarouselSliderFunctionality();
 }
-function updateWeeklyWeatherDisplay(necessaryWeatherData, appendTo) {}
+function updateWeeklyWeatherDisplay(necessaryWeatherData) {
+  const weeklyWeatherContainer = document.querySelector(
+    '.weekly-weather-container'
+  );
+  clearChildElements(weeklyWeatherContainer);
+  const elementsToAppend =
+    createWeeklyWeatherDisplayElements(necessaryWeatherData);
+  weeklyWeatherContainer.appendChild(elementsToAppend[0]);
+  weeklyWeatherContainer.appendChild(elementsToAppend[1]);
+
+  addWeeklyCarouselSliderFunctionality();
+}
 
 function getSVGToAppend(iconName) {
   const svgNS = 'http://www.w3.org/2000/svg';
