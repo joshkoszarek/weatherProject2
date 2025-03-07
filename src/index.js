@@ -5,7 +5,7 @@ import {
   displayWeather,
   displayInitialWeather,
 } from './display.js';
-// import './style.css';
+import './style.css';
 
 function main() {
   buildBoilerPlate();

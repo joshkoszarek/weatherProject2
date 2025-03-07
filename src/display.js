@@ -24,10 +24,13 @@ async function displayWeather(location) {
 }
 
 function displayInitialWeather() {
-  if (sessionStorage.getItem('currentLocation')) {
+  const sessionStorageValue = sessionStorage.getItem('currentLocation');
+  const localStorageValue = JSON.parse(localStorage.getItem('cities'));
+
+  if (sessionStorageValue) {
     displayWeather(sessionStorage.getItem('currentLocation'));
-  } else if (JSON.parse(localStorage.getItem('cities')).length > 0) {
-    displayWeather(JSON.parse(localStorage.getItem('cities'))[0]);
+  } else if (localStorageValue) {
+    displayWeather(localStorageValue[0]);
   } else {
     displayWeather('New York City, NY');
   }
@@ -521,8 +524,12 @@ const savedCities = (function getSavedCities() {
   };
   const addCity = function (cityName) {
     let arrOfCities = getCities();
-    arrOfCities.push(cityName);
-    localStorage.setItem('cities', JSON.stringify(arrOfCities));
+    if (arrOfCities) {
+      arrOfCities.push(cityName);
+      localStorage.setItem('cities', JSON.stringify(arrOfCities));
+    } else {
+      localStorage.setItem('cities', JSON.stringify([cityName]));
+    }
   };
   const getCities = function () {
     let arrOfCitiesStr = localStorage.getItem('cities');
@@ -538,10 +545,12 @@ function buildSavedLocationsDropDown() {
   const savedCitiesArr = savedCities.getCities();
   const savedLocationDropDown = document.createElement('div');
   savedLocationDropDown.classList.add('saved-locations-drop-down', 'hidden');
-  savedCitiesArr.forEach((city) => {
-    const newCityLocationContainer = buildNewLocationContainer(city);
-    savedLocationDropDown.appendChild(newCityLocationContainer);
-  });
+  if (savedCitiesArr) {
+    savedCitiesArr.forEach((city) => {
+      const newCityLocationContainer = buildNewLocationContainer(city);
+      savedLocationDropDown.appendChild(newCityLocationContainer);
+    });
+  }
 
   const cityContainer = document.createElement('div');
   cityContainer.classList.add('city-container');
@@ -559,7 +568,7 @@ function buildSavedLocationsDropDown() {
   cityContainer.addEventListener('click', (e) => {
     const currentCity = document.querySelector('.current-town');
     const currentCityName = currentCity.textContent;
-    if (!savedCitiesArr.includes(currentCityName)) {
+    if (!savedCitiesArr || !savedCitiesArr.includes(currentCityName)) {
       savedCities.addCity(currentCityName);
       updateSavedLocationDropDown();
     }
