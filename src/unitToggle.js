@@ -19,7 +19,7 @@ function addUnitToggleButtonFunctionality() {
     const tempElementNodeList = document.querySelectorAll('.temp');
     const unitElementNodeList = document.querySelectorAll('.units');
     const realFeelMessageElement = document.querySelector('.real-feel');
-    //want to update the textContent on each
+
     if (toggleBtn.classList.contains('celsius')) {
       tempElementNodeList.forEach((e) => {
         e.textContent = fahrenheitToCelsius(+e.textContent);
