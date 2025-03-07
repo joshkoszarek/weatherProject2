@@ -114,6 +114,7 @@ function createRightNowWeatherElements(necessaryWeatherData) {
 function createHourlyWeatherDisplayElements(necessaryWeatherData) {
   const title = document.createElement('div');
   title.classList.add('title');
+  title.textContent = 'Today';
 
   const carousel = createHourlyWeatherCarousel(necessaryWeatherData);
   let arrOfElementsToAppend = [title, carousel];
@@ -122,6 +123,7 @@ function createHourlyWeatherDisplayElements(necessaryWeatherData) {
 function createWeeklyWeatherDisplayElements(necessaryWeatherData) {
   const title = document.createElement('div');
   title.classList.add('title');
+  title.textContent = 'Coming up';
 
   const carousel = createWeeklyWeatherCarousel(necessaryWeatherData);
   let arrOfElementsToAppend = [title, carousel];
@@ -488,6 +490,8 @@ function getSavedCities() {
     'London, UK',
     'Scottsdale, AZ',
   ];
+  const deleteCity = function (cityToFilter) {};
+  const addCity = function (cityName) {};
   return arrOfCities;
 }
 
