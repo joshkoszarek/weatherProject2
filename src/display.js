@@ -10,7 +10,12 @@ import {
 } from './carousels.js';
 import { addLocationDropDownFunctionality } from './locationDropDown.js';
 import { getWeatherData, filterWeatherData } from './dataFiltering.js';
-export { displayWeatherData, buildBoilerPlate, displayWeather };
+export {
+  displayWeatherData,
+  buildBoilerPlate,
+  displayWeather,
+  displayInitialWeather,
+};
 
 async function displayWeather(location) {
   const allWeatherData = await getWeatherData(location);
@@ -18,6 +23,18 @@ async function displayWeather(location) {
   displayWeatherData(necessaryWeatherData);
 }
 
+function displayInitialWeather() {
+  // if session storage has a city display it
+  if (sessionStorage.getItem('currentLocation')) {
+    displayWeather(sessionStorage.getItem('currentLocation'));
+  } else if (JSON.parse(localStorage.getItem('cities')).length > 0) {
+    displayWeather(JSON.parse(localStorage.getItem('cities'))[0]);
+  } else {
+    displayWeather('New York City, NY');
+  }
+  // else if local Storage has cities, display the first one
+  // else display New York City, NY
+}
 function displayWeatherData(necessaryWeatherData) {
   updateTopLocationDisplay(necessaryWeatherData);
   updateRightNowWeatherDisplay(necessaryWeatherData);
@@ -498,9 +515,9 @@ function buildWeeklyWeatherContainerBoilerPlate() {
 }
 
 const savedCities = (function getSavedCities() {
-  let testArrOfCities = [];
-  let strOfArrOfCities = JSON.stringify(testArrOfCities);
-  localStorage.setItem('cities', strOfArrOfCities);
+  // let testArrOfCities = [];
+  // let strOfArrOfCities = JSON.stringify(testArrOfCities);
+  // localStorage.setItem('cities', strOfArrOfCities);
 
   const deleteCity = function (cityToFilter) {
     const arrOfCities = getCities();
@@ -516,9 +533,11 @@ const savedCities = (function getSavedCities() {
   };
   const getCities = function () {
     let arrOfCitiesStr = localStorage.getItem('cities');
-    let arrOfCities = JSON.parse(arrOfCitiesStr);
-    console.log(arrOfCities);
-    return arrOfCities;
+    if (arrOfCitiesStr) {
+      let arrOfCities = JSON.parse(arrOfCitiesStr);
+      console.log(arrOfCities);
+      return arrOfCities;
+    }
   };
   return { deleteCity, addCity, getCities };
 
@@ -577,6 +596,9 @@ function buildNewLocationContainer(city) {
   cityName.addEventListener('click', (e) => {
     const location = e.target.textContent;
     displayWeather(location);
+    //add location to session storage
+    // sessionStorage.clear();
+    // sessionStorage.setItem('currentLocation', location);
   });
   deleteCityBtn.addEventListener('click', (e) => {
     const cityName = e.target.previousSibling.textContent;
