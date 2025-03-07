@@ -1,6 +1,4 @@
 import {
-  fahrenheitToCelsius,
-  celsiusToFahrenheit,
   getSVGToAppend,
   clearChildElements,
   militaryTimeToRegularTime,

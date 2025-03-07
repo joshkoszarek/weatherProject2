@@ -14,7 +14,6 @@ function addHourlyCarouselSliderFunctionality() {
   const allHoursContainer = document.querySelector('.all-hours-container');
 
   rightChevronBtn.addEventListener('click', () => {
-    console.log('clicked');
     const carouselInfoObj = calculateCarouselInfo(100, 10, 24, 600);
     const moveRight = currentPosition + carouselInfoObj.slideSize;
     if (moveRight < carouselInfoObj.maxPosition) {
@@ -24,7 +23,6 @@ function addHourlyCarouselSliderFunctionality() {
   });
 
   leftChevronBtn.addEventListener('click', () => {
-    console.log('clicked');
     const carouselInfoObj = calculateCarouselInfo(100, 10, 24, 600);
     const moveLeft = currentPosition - carouselInfoObj.slideSize;
     if (moveLeft >= 0) {
@@ -44,7 +42,6 @@ function addWeeklyCarouselSliderFunctionality() {
   const allDaysContainer = document.querySelector('.all-days-container');
 
   rightChevronBtn.addEventListener('click', () => {
-    console.log('clicked');
     const carouselInfoObj = calculateCarouselInfo(100, 10, 7, 600);
     const moveRight = currentPosition + carouselInfoObj.slideSize;
     if (moveRight < carouselInfoObj.maxPosition) {
@@ -54,7 +51,6 @@ function addWeeklyCarouselSliderFunctionality() {
   });
 
   leftChevronBtn.addEventListener('click', () => {
-    console.log('clicked');
     const carouselInfoObj = calculateCarouselInfo(100, 10, 7, 600);
     const moveLeft = currentPosition - carouselInfoObj.slideSize;
     if (moveLeft >= 0) {

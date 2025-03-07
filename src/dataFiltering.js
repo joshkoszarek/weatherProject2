@@ -1,9 +1,9 @@
 import { preRoundData, getCurrentHour, getHoursLeftInDay } from './utility.js';
 export { getWeatherData, filterWeatherData };
 
-async function getWeatherData(city, state) {
+async function getWeatherData(location) {
   const response = await fetch(
-    `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${city}%2C%20${state}?unitGroup=us&key=2B8BEFV7ZKPJSVHZRL5ALNRP5&contentType=json`,
+    `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?unitGroup=us&key=2B8BEFV7ZKPJSVHZRL5ALNRP5&contentType=json`,
     { mode: 'cors' }
   );
   const weatherData = await response.json();

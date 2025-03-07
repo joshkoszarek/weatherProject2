@@ -169,7 +169,6 @@ function preRoundData(temp) {
 }
 
 function updateRealFeelMessage(message, unitsToConvertTo) {
-  //failed to get the negative
   const extractedNumber = message.match(/-?\d+/);
   let convertedNumber = '';
   unitsToConvertTo === 'celsius'
