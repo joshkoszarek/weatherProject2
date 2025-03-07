@@ -597,8 +597,8 @@ function buildNewLocationContainer(city) {
     const location = e.target.textContent;
     displayWeather(location);
     //add location to session storage
-    // sessionStorage.clear();
-    // sessionStorage.setItem('currentLocation', location);
+    sessionStorage.clear();
+    sessionStorage.setItem('currentLocation', location);
   });
   deleteCityBtn.addEventListener('click', (e) => {
     const cityName = e.target.previousSibling.textContent;

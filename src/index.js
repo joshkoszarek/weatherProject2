@@ -9,8 +9,7 @@ import {
 
 function main() {
   buildBoilerPlate();
-  displayWeather('Waterford, WI');
-  // displayInitialWeather();
+  displayInitialWeather();
   addSearchBarFunctionality();
   addUnitToggleButtonFunctionality();
 }

@@ -15,5 +15,7 @@ function addSearchBarFunctionality() {
     const inputData = e.target.elements.searchBar.value;
     displayWeather(inputData);
     e.target.elements.searchBar.value = '';
+    sessionStorage.clear();
+    sessionStorage.setItem('currentLocation', inputData);
   });
 }
