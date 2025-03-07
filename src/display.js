@@ -120,6 +120,7 @@ function createHourlyWeatherDisplayElements(necessaryWeatherData) {
   let arrOfElementsToAppend = [title, carousel];
   return arrOfElementsToAppend;
 }
+
 function createWeeklyWeatherDisplayElements(necessaryWeatherData) {
   const title = document.createElement('div');
   title.classList.add('title');
@@ -129,6 +130,7 @@ function createWeeklyWeatherDisplayElements(necessaryWeatherData) {
   let arrOfElementsToAppend = [title, carousel];
   return arrOfElementsToAppend;
 }
+
 function createHourlyWeatherCarousel(necessaryWeatherData) {
   const carouselContainer = document.createElement('div');
   carouselContainer.classList.add('carousel-container');
@@ -330,7 +332,25 @@ function updateTopLocationDisplay(necessaryWeatherData) {
   });
   addLocationDropDownFunctionality();
 }
+function updateSavedLocationDropDown() {
+  const weatherLocationContainer = document.querySelector(
+    '.weather-location-container'
+  );
+  const oldSavedLocationsDropDown = document.querySelector(
+    '.saved-locations-drop-down'
+  );
+  clearChildElements(oldSavedLocationsDropDown);
+  weatherLocationContainer.removeChild(oldSavedLocationsDropDown);
 
+  //clear child nodes from saved-location-drop-down
+  //remove saved-location-drop-down
+  //make location drop down with updated info
+  //append it to weather location drop down
+  //add location drop down toggle functionality
+  const savedLocationsDropDown = buildSavedLocationsDropDown();
+  weatherLocationContainer.appendChild(savedLocationsDropDown);
+  addLocationDropDownFunctionality();
+}
 function updateRightNowWeatherDisplay(necessaryWeatherData) {
   const currentWeatherContainer = document.querySelector(
     '.current-weather-container'
@@ -482,7 +502,7 @@ function buildWeeklyWeatherContainerBoilerPlate() {
   return weeklyWeatherContainer;
 }
 
-function getSavedCities() {
+const savedCities = (function getSavedCities() {
   const arrOfCities = [
     'Waterford, WI',
     'New York City, NY',
@@ -490,13 +510,25 @@ function getSavedCities() {
     'London, UK',
     'Scottsdale, AZ',
   ];
-  const deleteCity = function (cityToFilter) {};
-  const addCity = function (cityName) {};
-  return arrOfCities;
-}
+  const deleteCity = function (cityToFilter) {
+    const remainingCitiesArr = arrOfCities.filter(
+      (city) => city !== cityToFilter
+    );
+    arrOfCities = remainingCitiesArr;
+  };
+  const addCity = function (cityName) {
+    arrOfCities.push(cityName);
+  };
+  const getCities = function () {
+    return arrOfCities;
+  };
+  return { deleteCity, addCity, getCities };
+  // return arrOfCities;
+})();
 
 function buildSavedLocationsDropDown() {
-  const savedCitiesArr = getSavedCities();
+  // const savedCitiesArr = getSavedCities();
+  const savedCitiesArr = savedCities.getCities();
   const savedLocationDropDown = document.createElement('div');
   savedLocationDropDown.classList.add('saved-locations-drop-down', 'hidden');
   savedCitiesArr.forEach((city) => {
@@ -514,11 +546,23 @@ function buildSavedLocationsDropDown() {
   addToSavedCitiesBtn.classList.add('add-to-saved-cities-btn');
   addToSavedCitiesBtn.textContent = '+';
 
+  cityContainer.appendChild(cityName);
+  cityContainer.appendChild(addToSavedCitiesBtn);
+
   cityContainer.addEventListener('click', (e) => {
     //select the currently viewed city
     // check if its already in the array
     // if not add to array
     // if it is then do nothing
+    console.log('clicked');
+    const currentCity = document.querySelector('.current-town');
+    const currentCityName = currentCity.textContent;
+    console.log(currentCityName);
+    if (!savedCitiesArr.includes(currentCityName)) {
+      savedCities.addCity(currentCityName);
+      console.log(savedCities.getCities());
+      updateSavedLocationDropDown();
+    }
   });
 
   savedLocationDropDown.appendChild(cityContainer);
