@@ -147,6 +147,11 @@ nav {
   font-size: 16px;
   font-weight: 500;
 }
+
+.city-name:hover {
+  cursor: pointer;
+}
+
 .delete-city-btn,
 .add-to-saved-cities-btn {
   width: 30px;

@@ -9,8 +9,14 @@ import {
   addWeeklyCarouselSliderFunctionality,
 } from './carousels.js';
 import { addLocationDropDownFunctionality } from './locationDropDown.js';
+import { getWeatherData, filterWeatherData } from './dataFiltering.js';
+export { displayWeatherData, buildBoilerPlate, displayWeather };
 
-export { displayWeatherData, buildBoilerPlate };
+async function displayWeather(location) {
+  const allWeatherData = await getWeatherData(location);
+  const necessaryWeatherData = filterWeatherData(allWeatherData);
+  displayWeatherData(necessaryWeatherData);
+}
 
 function displayWeatherData(necessaryWeatherData) {
   updateTopLocationDisplay(necessaryWeatherData);
@@ -378,8 +384,9 @@ function buildNavBoilerPlate() {
   currentWeatherLocationContainer.classList.add(
     'current-weather-location-container'
   );
-  const savedLocationsDropDown = document.createElement('div');
-  savedLocationsDropDown.classList.add('saved-locations-drop-down', 'hidden');
+  // const savedLocationsDropDown = document.createElement('div');
+  // savedLocationsDropDown.classList.add('saved-locations-drop-down', 'hidden');
+  const savedLocationsDropDown = buildSavedLocationsDropDown();
 
   weatherLocationContainer.appendChild(currentWeatherLocationContainer);
   weatherLocationContainer.appendChild(savedLocationsDropDown);
@@ -471,4 +478,73 @@ function buildWeeklyWeatherContainerBoilerPlate() {
   const weeklyWeatherContainer = document.createElement('section');
   weeklyWeatherContainer.classList.add('weekly-weather-container');
   return weeklyWeatherContainer;
+}
+
+function getSavedCities() {
+  const arrOfCities = [
+    'Waterford, WI',
+    'New York City, NY',
+    'San Diego, CA',
+    'London, UK',
+    'Scottsdale, AZ',
+  ];
+  return arrOfCities;
+}
+
+function buildSavedLocationsDropDown() {
+  const savedCitiesArr = getSavedCities();
+  const savedLocationDropDown = document.createElement('div');
+  savedLocationDropDown.classList.add('saved-locations-drop-down', 'hidden');
+  savedCitiesArr.forEach((city) => {
+    const newCityLocationContainer = buildNewLocationContainer(city);
+    savedLocationDropDown.appendChild(newCityLocationContainer);
+  });
+
+  const cityContainer = document.createElement('div');
+  cityContainer.classList.add('city-container');
+  cityContainer.setAttribute('id', 'add-new-city-btn');
+  const cityName = document.createElement('h3');
+  cityName.classList.add('city-name');
+  cityName.textContent = 'Add to saved';
+  const addToSavedCitiesBtn = document.createElement('button');
+  addToSavedCitiesBtn.classList.add('add-to-saved-cities-btn');
+  addToSavedCitiesBtn.textContent = '+';
+
+  cityContainer.addEventListener('click', (e) => {
+    //select the currently viewed city
+    // check if its already in the array
+    // if not add to array
+    // if it is then do nothing
+  });
+
+  savedLocationDropDown.appendChild(cityContainer);
+
+  return savedLocationDropDown;
+}
+
+function buildNewLocationContainer(city) {
+  const cityContainer = document.createElement('div');
+  cityContainer.classList.add('city-container');
+  const cityName = document.createElement('h3');
+  cityName.classList.add('city-name');
+  cityName.textContent = city;
+  const deleteCityBtn = document.createElement('button');
+  deleteCityBtn.classList.add('delete-city-btn');
+  deleteCityBtn.textContent = '-';
+
+  cityContainer.appendChild(cityName);
+  cityContainer.appendChild(deleteCityBtn);
+
+  // add city name click functionality
+  // add delete city button functionality
+  cityName.addEventListener('click', (e) => {
+    const location = e.target.textContent;
+    displayWeather(location);
+  });
+  deleteCityBtn.addEventListener('click', (e) => {
+    // delete the node from the list
+    // delete from the array (local storage later on)
+  });
+
+  return cityContainer;
 }
