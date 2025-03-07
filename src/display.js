@@ -498,27 +498,31 @@ function buildWeeklyWeatherContainerBoilerPlate() {
 }
 
 const savedCities = (function getSavedCities() {
-  let arrOfCities = [
-    'Waterford, WI',
-    'New York City, NY',
-    'San Diego, CA',
-    'London, UK',
-    'Scottsdale, AZ',
-  ];
+  let testArrOfCities = [];
+  let strOfArrOfCities = JSON.stringify(testArrOfCities);
+  localStorage.setItem('cities', strOfArrOfCities);
+
   const deleteCity = function (cityToFilter) {
+    const arrOfCities = getCities();
     const remainingCitiesArr = arrOfCities.filter(
       (city) => city !== cityToFilter
     );
-    arrOfCities = remainingCitiesArr;
+    localStorage.setItem('cities', JSON.stringify(remainingCitiesArr));
   };
   const addCity = function (cityName) {
+    let arrOfCities = getCities();
     arrOfCities.push(cityName);
+    localStorage.setItem('cities', JSON.stringify(arrOfCities));
   };
   const getCities = function () {
+    let arrOfCitiesStr = localStorage.getItem('cities');
+    let arrOfCities = JSON.parse(arrOfCitiesStr);
+    console.log(arrOfCities);
     return arrOfCities;
   };
   return { deleteCity, addCity, getCities };
-  // return arrOfCities;
+
+  //keep the methods but need to have an array of cities updated and retrieved via local storage
 })();
 
 function buildSavedLocationsDropDown() {
