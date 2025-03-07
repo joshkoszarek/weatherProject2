@@ -1,6 +1,6 @@
 import { getWeatherData, filterWeatherData } from './dataFiltering.js';
 import { displayWeatherData } from './display.js';
-export { addSearchBarFunctionality };
+export { addSearchBarFunctionality, displayWeather };
 async function displayWeather(location) {
   const allWeatherData = await getWeatherData(location);
   const necessaryWeatherData = filterWeatherData(allWeatherData);

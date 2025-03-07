@@ -10,7 +10,7 @@ import {
 } from './carousels.js';
 import { addLocationDropDownFunctionality } from './locationDropDown.js';
 
-export { displayWeatherData };
+export { displayWeatherData, buildBoilerPlate };
 
 function displayWeatherData(necessaryWeatherData) {
   updateTopLocationDisplay(necessaryWeatherData);
@@ -357,4 +357,118 @@ function updateWeeklyWeatherDisplay(necessaryWeatherData) {
   weeklyWeatherContainer.appendChild(elementsToAppend[1]);
 
   addWeeklyCarouselSliderFunctionality();
+}
+
+function buildBoilerPlate() {
+  const body = document.querySelector('body');
+  const nav = buildNavBoilerPlate();
+  const mainContentContainer = buildMainContentContainerBoilerPlate();
+  body.appendChild(nav);
+  body.appendChild(mainContentContainer);
+}
+
+function buildNavBoilerPlate() {
+  const nav = document.createElement('nav');
+
+  const mainNavContentContainer = document.createElement('div');
+  mainNavContentContainer.classList.add('main-nav-content-container');
+  const weatherLocationContainer = document.createElement('div');
+  weatherLocationContainer.classList.add('weather-location-container');
+  const currentWeatherLocationContainer = document.createElement('div');
+  currentWeatherLocationContainer.classList.add(
+    'current-weather-location-container'
+  );
+  const savedLocationsDropDown = document.createElement('div');
+  savedLocationsDropDown.classList.add('saved-locations-drop-down', 'hidden');
+
+  weatherLocationContainer.appendChild(currentWeatherLocationContainer);
+  weatherLocationContainer.appendChild(savedLocationsDropDown);
+
+  const unitChangingContainer = document.createElement('div');
+  unitChangingContainer.classList.add('unit-changing-container');
+  const fahrenheitContainer = document.createElement('div');
+  fahrenheitContainer.classList.add('fahrenheit-container');
+  const fahrenheit = document.createElement('h5');
+  fahrenheit.classList.add('selected');
+  fahrenheit.textContent = '°F';
+  const toggleBtnContainer = document.createElement('button');
+  toggleBtnContainer.classList.add('toggle-btn-container');
+  const innerToggle = document.createElement('div');
+  innerToggle.classList.add('inner-toggle');
+
+  const celsiusContainer = document.createElement('div');
+  celsiusContainer.classList.add('celsius-container');
+  const celsius = document.createElement('h5');
+  celsius.textContent = '°C';
+
+  fahrenheitContainer.appendChild(fahrenheit);
+  toggleBtnContainer.appendChild(innerToggle);
+  celsiusContainer.appendChild(celsius);
+
+  unitChangingContainer.appendChild(fahrenheitContainer);
+  unitChangingContainer.appendChild(toggleBtnContainer);
+  unitChangingContainer.appendChild(celsiusContainer);
+
+  const searchBarContainer = document.createElement('div');
+  searchBarContainer.classList.add('search-bar-container');
+  const searchForm = document.createElement('form');
+  searchForm.setAttribute('action', '');
+  searchForm.classList.add('search-bar');
+  const searchSubmitBtn = document.createElement('button');
+  searchSubmitBtn.setAttribute('type', 'submit');
+  searchSubmitBtn.classList.add('search-bar-icon');
+  const searchBarIcon = getSVGToAppend('search-bar');
+  const searchBarLabel = document.createElement('label');
+  searchBarLabel.setAttribute('for', 'searchBar');
+  const searchBarInput = document.createElement('input');
+  searchBarInput.setAttribute('type', 'text');
+  searchBarInput.setAttribute('name', 'searchBar');
+  searchBarInput.setAttribute('id', 'searchBar');
+
+  searchSubmitBtn.appendChild(searchBarIcon);
+
+  searchForm.appendChild(searchSubmitBtn);
+  searchForm.appendChild(searchBarLabel);
+  searchForm.appendChild(searchBarInput);
+
+  searchBarContainer.appendChild(searchForm);
+
+  mainNavContentContainer.appendChild(weatherLocationContainer);
+  mainNavContentContainer.appendChild(unitChangingContainer);
+  mainNavContentContainer.appendChild(searchBarContainer);
+
+  nav.appendChild(mainNavContentContainer);
+
+  return nav;
+}
+
+function buildMainContentContainerBoilerPlate() {
+  const mainContentContainer = document.createElement('div');
+  mainContentContainer.classList.add('main-content-container');
+  const rightNowWeatherContainer = buildRightNowWeatherContainerBoilerPlate();
+  const hourlyWeatherContainer = buildHourlyWeatherContainerBoilerPlate();
+  const weeklyWeatherContainer = buildWeeklyWeatherContainerBoilerPlate();
+
+  mainContentContainer.appendChild(rightNowWeatherContainer);
+  mainContentContainer.appendChild(hourlyWeatherContainer);
+  mainContentContainer.appendChild(weeklyWeatherContainer);
+  return mainContentContainer;
+}
+
+function buildRightNowWeatherContainerBoilerPlate() {
+  const currentWeatherContainer = document.createElement('section');
+  currentWeatherContainer.classList.add('current-weather-container');
+  return currentWeatherContainer;
+}
+
+function buildHourlyWeatherContainerBoilerPlate() {
+  const hourlyWeatherContainer = document.createElement('section');
+  hourlyWeatherContainer.classList.add('hourly-weather-container');
+  return hourlyWeatherContainer;
+}
+
+function buildWeeklyWeatherContainerBoilerPlate() {
+  const weeklyWeatherContainer = document.createElement('section');
+  weeklyWeatherContainer.classList.add('weekly-weather-container');
+  return weeklyWeatherContainer;
 }
