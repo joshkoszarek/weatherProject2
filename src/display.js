@@ -342,11 +342,6 @@ function updateSavedLocationDropDown() {
   clearChildElements(oldSavedLocationsDropDown);
   weatherLocationContainer.removeChild(oldSavedLocationsDropDown);
 
-  //clear child nodes from saved-location-drop-down
-  //remove saved-location-drop-down
-  //make location drop down with updated info
-  //append it to weather location drop down
-  //add location drop down toggle functionality
   const savedLocationsDropDown = buildSavedLocationsDropDown();
   weatherLocationContainer.appendChild(savedLocationsDropDown);
   addLocationDropDownFunctionality();
@@ -503,7 +498,7 @@ function buildWeeklyWeatherContainerBoilerPlate() {
 }
 
 const savedCities = (function getSavedCities() {
-  const arrOfCities = [
+  let arrOfCities = [
     'Waterford, WI',
     'New York City, NY',
     'San Diego, CA',
@@ -527,7 +522,6 @@ const savedCities = (function getSavedCities() {
 })();
 
 function buildSavedLocationsDropDown() {
-  // const savedCitiesArr = getSavedCities();
   const savedCitiesArr = savedCities.getCities();
   const savedLocationDropDown = document.createElement('div');
   savedLocationDropDown.classList.add('saved-locations-drop-down', 'hidden');
@@ -550,17 +544,10 @@ function buildSavedLocationsDropDown() {
   cityContainer.appendChild(addToSavedCitiesBtn);
 
   cityContainer.addEventListener('click', (e) => {
-    //select the currently viewed city
-    // check if its already in the array
-    // if not add to array
-    // if it is then do nothing
-    console.log('clicked');
     const currentCity = document.querySelector('.current-town');
     const currentCityName = currentCity.textContent;
-    console.log(currentCityName);
     if (!savedCitiesArr.includes(currentCityName)) {
       savedCities.addCity(currentCityName);
-      console.log(savedCities.getCities());
       updateSavedLocationDropDown();
     }
   });
@@ -583,15 +570,14 @@ function buildNewLocationContainer(city) {
   cityContainer.appendChild(cityName);
   cityContainer.appendChild(deleteCityBtn);
 
-  // add city name click functionality
-  // add delete city button functionality
   cityName.addEventListener('click', (e) => {
     const location = e.target.textContent;
     displayWeather(location);
   });
   deleteCityBtn.addEventListener('click', (e) => {
-    // delete the node from the list
-    // delete from the array (local storage later on)
+    const cityName = e.target.previousSibling.textContent;
+    savedCities.deleteCity(cityName);
+    updateSavedLocationDropDown();
   });
 
   return cityContainer;
