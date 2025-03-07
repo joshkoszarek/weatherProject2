@@ -24,7 +24,6 @@ async function displayWeather(location) {
 }
 
 function displayInitialWeather() {
-  // if session storage has a city display it
   if (sessionStorage.getItem('currentLocation')) {
     displayWeather(sessionStorage.getItem('currentLocation'));
   } else if (JSON.parse(localStorage.getItem('cities')).length > 0) {
@@ -32,8 +31,6 @@ function displayInitialWeather() {
   } else {
     displayWeather('New York City, NY');
   }
-  // else if local Storage has cities, display the first one
-  // else display New York City, NY
 }
 function displayWeatherData(necessaryWeatherData) {
   updateTopLocationDisplay(necessaryWeatherData);
@@ -515,10 +512,6 @@ function buildWeeklyWeatherContainerBoilerPlate() {
 }
 
 const savedCities = (function getSavedCities() {
-  // let testArrOfCities = [];
-  // let strOfArrOfCities = JSON.stringify(testArrOfCities);
-  // localStorage.setItem('cities', strOfArrOfCities);
-
   const deleteCity = function (cityToFilter) {
     const arrOfCities = getCities();
     const remainingCitiesArr = arrOfCities.filter(
@@ -535,13 +528,10 @@ const savedCities = (function getSavedCities() {
     let arrOfCitiesStr = localStorage.getItem('cities');
     if (arrOfCitiesStr) {
       let arrOfCities = JSON.parse(arrOfCitiesStr);
-      console.log(arrOfCities);
       return arrOfCities;
     }
   };
   return { deleteCity, addCity, getCities };
-
-  //keep the methods but need to have an array of cities updated and retrieved via local storage
 })();
 
 function buildSavedLocationsDropDown() {
